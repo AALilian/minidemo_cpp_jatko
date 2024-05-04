@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <vector>
-
 #include <chrono>
 #include <thread>
 
@@ -16,8 +15,6 @@ void print_array(std::vector<int> v, int n)
 	for (int i = 0; i < n; ++i)
 		std::cout << v[i] << " ";
 }
-
-/* ------------------------------------------ PANCAKE SORT ------------------------------------------ */
 
 //! this function is called every time the vector is updated/changed and we want to draw the new state of the sorting
 void draw_state(std::vector<int>& v, SDL_Renderer* r, int sorted = -1, int max_val = -1) {
@@ -55,6 +52,8 @@ void draw_state(std::vector<int>& v, SDL_Renderer* r, int sorted = -1, int max_v
 	SDL_Delay(100);
 }
 
+/* ------------------------------------------ PANCAKE SORT ------------------------------------------ */
+
 //! help function for pancake sort: flips the vector[0...i]
 void flip(std::vector<int>& v, int i) {
 	int temp, start = 0;
@@ -67,24 +66,23 @@ void flip(std::vector<int>& v, int i) {
 	}
 }
 
-//! help function for pancake sort: return the index of the max value in given vector
-int find_max(std::vector<int>& v, int n) {
-	int mi, i;
-
-	for (mi = 0, i = 0; i < n; ++i) {
-		if (v[i] > v[mi]) {
-			mi = i;
-		}
-	}
-
-	return mi;
-}
-
 //! main function for pancake sort algorithm
 void pancake_sort(std::vector<int>& v, int n, SDL_Renderer* r) {
 	std::cout << "PANCAKE!!!\n";
 
 	for (int current_size = n; current_size > 1; --current_size) {
+		//! help (lambda)function for pancake sort: return the index of the max value in given vector
+		auto find_max = [](std::vector<int>& v, int n) {
+			int mi, i;
+
+			for (mi = 0, i = 0; i < n; ++i) {
+				if (v[i] > v[mi]) {
+					mi = i;
+				}
+			}
+			return mi;
+		};
+
 		int max_i = find_max(v, current_size);
 
 		draw_state(v, r, current_size, max_i);
@@ -134,7 +132,6 @@ void gnome_sort(std::vector<int>& v, int n, SDL_Renderer* r) {
 //! all threads asleep at first
 //! "each thread sleeps for an amount of time which is proportional to the value of corresponding array element" 
 //! lmao what is this 
-
 void sleep_sort(SDL_Renderer* r) {
 	std::cout << "SLEEP!!!\n";
 	std::vector<int> s = { 13, 2, 4, 5, 1, 6 , 16, 20, 21, 22 };
@@ -153,5 +150,3 @@ void sleep_sort(SDL_Renderer* r) {
 		thread.join();
 	}
 }
-
-

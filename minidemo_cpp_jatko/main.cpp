@@ -5,7 +5,7 @@
 
 int main(int argc, char* args[]) {
 
-	SDL_Window* window = SDL_CreateWindow("Nimi", 0, 0, 1200, 640, SDL_WINDOW_SHOWN);
+	SDL_Window* window = SDL_CreateWindow("Sort", 0, 0, 1200, 640, SDL_WINDOW_SHOWN);
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, 1, 0);
 
 	if (window == nullptr || renderer == nullptr) {
@@ -18,13 +18,17 @@ int main(int argc, char* args[]) {
 	SDL_Init(SDL_INIT_EVERYTHING);
 
 	std::vector<int> v;
-	std::random_device rd;
-	std::uniform_int_distribution d(1, 500);
+	//std::random_device rd;
+	//std::uniform_int_distribution d(1, 500);
 
 	for (int i = 0; i < 200; ++i) {
-		v.push_back(d(rd));
+		//v.push_back(d(rd));
+		v.push_back(i);
 	}
 	int n = v.size();
+
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	std::shuffle(v.begin(), v.end(), std::default_random_engine(seed));		
 
 	pancake_sort(v, n, renderer);
 
