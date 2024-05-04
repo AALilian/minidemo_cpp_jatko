@@ -3,13 +3,6 @@
 
 #include "sort.h"
 
-//! print the vector to the console
-void print_array(std::vector<int> v, int n)
-{
-	for (int i = 0; i < n; ++i)
-		std::cout << v[i] << " ";
-}
-
 int main(int argc, char* args[]) {
 
 	SDL_Window* window = SDL_CreateWindow("Nimi", 0, 0, 1200, 640, SDL_WINDOW_SHOWN);
@@ -31,18 +24,13 @@ int main(int argc, char* args[]) {
 	for (int i = 0; i < 200; ++i) {
 		v.push_back(d(rd));
 	}
-
 	int n = v.size();
 
-	//pancake_sort(v, n, renderer);
+	pancake_sort(v, n, renderer);
 
-	gnome_sort(v, n, renderer);
+	//gnome_sort(v, n, renderer);
 
 	//sleep_sort(renderer);
-
-
-	//std::cout << "sorted: ";
-	//print_array(v, n);
 
 	SDL_Delay(5000);
 

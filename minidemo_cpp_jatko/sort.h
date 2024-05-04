@@ -10,6 +10,13 @@
 
 //! pancake and gnome sorting algorithsm from https://www.geeksforgeeks.org/
 
+//! print the vector to the console
+void print_array(std::vector<int> v, int n)
+{
+	for (int i = 0; i < n; ++i)
+		std::cout << v[i] << " ";
+}
+
 /* ------------------------------------------ PANCAKE SORT ------------------------------------------ */
 
 //! this function is called every time the vector is updated/changed and we want to draw the new state of the sorting
@@ -90,6 +97,9 @@ void pancake_sort(std::vector<int>& v, int n, SDL_Renderer* r) {
 			flip(v, current_size - 1);
 		}
 	}
+	
+	std::cout << "sorted: ";
+	print_array(v, n);
 }
 
 /* ------------------------------------------ GNOME SORT ------------------------------------------ */
@@ -113,6 +123,9 @@ void gnome_sort(std::vector<int>& v, int n, SDL_Renderer* r) {
 
 		draw_state(v, r, index);
 	}
+
+	std::cout << "sorted: ";
+	print_array(v, n);
 }
 
 /* ------------------------------------------ SLEEP SORT ------------------------------------------ */
