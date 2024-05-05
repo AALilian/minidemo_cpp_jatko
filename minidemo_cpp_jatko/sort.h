@@ -4,7 +4,7 @@
 #include <vector>
 #include <chrono>
 #include <thread>
-#include <exception>
+#include <mutex>
 
 #include <SDL.h>
 
@@ -42,7 +42,7 @@ void draw_state(std::vector<int>& v, SDL_Renderer* r, int sorted = -1, int max_v
 		else {
 			SDL_SetRenderDrawColor(r, 255, 255, 255, 255);
 		}
-		
+
 		SDL_RenderDrawLine(r, i, 0, i, index);
 
 		//SDL_SetRenderDrawColor(r, 0, 255, 255, 255);
@@ -89,7 +89,7 @@ void pancake_sort(std::vector<int>& v, SDL_Renderer* r) {
 				}
 			}
 			return mi;
-		};
+			};
 
 		int max_i = find_max(v, current_size);
 
@@ -103,7 +103,7 @@ void pancake_sort(std::vector<int>& v, SDL_Renderer* r) {
 			flip(v, current_size - 1);
 		}
 	}
-	
+
 	std::cout << "\nsorted vector: ";
 	print_array(v, v.size());
 }
@@ -119,7 +119,7 @@ void gnome_sort(std::vector<int>& v, SDL_Renderer* r) {
 
 	std::cout << "\nunsorted vector: ";
 	print_array(v, v.size());
-	
+
 	int index = 0;
 	while (index < v.size()) {
 		if (index == 0) index++;
@@ -142,10 +142,14 @@ void gnome_sort(std::vector<int>& v, SDL_Renderer* r) {
 /* ------------------------------------------ SLEEP SORT ------------------------------------------ */
 
 #define MAX 100
-static int lookup_table[MAX] = { 0 };
+int lookup_table[MAX] = { 0 };
+
+std::mutex mtx;
 
 void draw_vector(std::vector<int>& v, SDL_Renderer* r) {
-	//! draw black screen
+
+	std::lock_guard<std::mutex> guard(mtx);
+
 	SDL_SetRenderDrawColor(r, 0, 0, 0, 255);
 	SDL_RenderClear(r);
 
@@ -153,7 +157,7 @@ void draw_vector(std::vector<int>& v, SDL_Renderer* r) {
 
 	for (int i = 0; i < MAX; ++i) {
 
-		if (lookup_table[i] == 1) {
+		if (lookup_table[i] != 0) {
 			SDL_RenderDrawLine(r, i, 0, i, v[i]);
 		}
 	}
@@ -168,10 +172,10 @@ void draw_vector(std::vector<int>& v, SDL_Renderer* r) {
 void sleep_sort(std::vector<int>& v, SDL_Renderer* r) {
 	std::cout << "\n\nSLEEP SORT!!!\n";
 
-	std::cout << "\nunsorted vector: "; 
+	std::cout << "\nunsorted vector: ";
 	print_array(v, v.size());
 
-	SDL_RenderSetScale(r, 50, 30); // heh
+	SDL_RenderSetScale(r, 50, 30); // hmm
 	SDL_SetRenderDrawColor(r, 0, 0, 0, 255);
 	SDL_RenderClear(r);
 	SDL_SetRenderDrawColor(r, 255, 255, 255, 255);
@@ -184,7 +188,7 @@ void sleep_sort(std::vector<int>& v, SDL_Renderer* r) {
 			std::this_thread::sleep_for(std::chrono::seconds(v[i]));
 			std::cout << v[i] << "\n";
 
-			lookup_table[i] = 1; 
+			lookup_table[i] = v[i];
 			draw_vector(v, r);
 			});
 	}
