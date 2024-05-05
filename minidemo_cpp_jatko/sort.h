@@ -11,10 +11,12 @@
 //! pancake and gnome sorting algorithsm from https://www.geeksforgeeks.org/
 
 //! print the vector to the console
-void print_array(std::vector<int> v, int n)
+void print_array(std::vector<int> v, int array_size)
 {
-	for (int i = 0; i < n; ++i)
+	for (int i = 0; i < array_size; ++i)
 		std::cout << v[i] << " ";
+
+	std::cout << "\n";
 }
 
 //! this function is called every time the vector is updated/changed and we want to draw the new state of the sorting
@@ -69,9 +71,12 @@ void flip(std::vector<int>& v, int i) {
 
 //! main function for pancake sort algorithm
 void pancake_sort(std::vector<int>& v, SDL_Renderer* r) {
-	std::cout << "PANCAKE!!!\n";
+	std::cout << "\nPANCAKE SORT!!!\n";
 
 	SDL_RenderSetScale(r, 8, 8);
+
+	std::cout << "\nunsorted vector: ";
+	print_array(v, v.size());
 
 	for (int current_size = v.size(); current_size > 1; --current_size) {
 		//! help (lambda)function for pancake sort: return the index of the max value in given vector
@@ -99,7 +104,7 @@ void pancake_sort(std::vector<int>& v, SDL_Renderer* r) {
 		}
 	}
 	
-	std::cout << "sorted: ";
+	std::cout << "\nsorted vector: ";
 	print_array(v, v.size());
 }
 
@@ -108,9 +113,12 @@ void pancake_sort(std::vector<int>& v, SDL_Renderer* r) {
 //! based on garden gnome sorting flower pots. compares two values (or pots) and if they are in the right order, continues forward. 
 //! if not, two values are swapped until the order is right and the algorithm (or gnome) can continue
 void gnome_sort(std::vector<int>& v, SDL_Renderer* r) {
-	std::cout << "GNOME!!!!\n";
+	std::cout << "\n\nGNOME!!!! SORT!!\n";
 
 	SDL_RenderSetScale(r, 40, 40);
+
+	std::cout << "\nunsorted vector: ";
+	print_array(v, v.size());
 	
 	int index = 0;
 	while (index < v.size()) {
@@ -127,7 +135,7 @@ void gnome_sort(std::vector<int>& v, SDL_Renderer* r) {
 		draw_state(v, r, index);
 	}
 
-	std::cout << "sorted: ";
+	std::cout << "\nsorted vector: ";
 	print_array(v, v.size());
 }
 
@@ -158,7 +166,10 @@ void draw_vector(std::vector<int>& v, SDL_Renderer* r) {
 //! thread wakes up to print the corresponding number
 //! lmao what is this 
 void sleep_sort(std::vector<int>& v, SDL_Renderer* r) {
-	std::cout << "SLEEP!!!\n";
+	std::cout << "\n\nSLEEP SORT!!!\n";
+
+	std::cout << "\nunsorted vector: "; 
+	print_array(v, v.size());
 
 	SDL_RenderSetScale(r, 50, 30); // heh
 	SDL_SetRenderDrawColor(r, 0, 0, 0, 255);
@@ -183,5 +194,6 @@ void sleep_sort(std::vector<int>& v, SDL_Renderer* r) {
 		thread.join();
 	}
 
-	std::cout << "d o n e";
+	std::cout << "\n(still) unsorted array: ";
+	print_array(v, v.size());
 }

@@ -14,9 +14,11 @@ int main(int argc, char* args[]) {
 
 	SDL_Init(SDL_INIT_EVERYTHING);
 
+	//! vectors for pancake sort, gnome sort and sleep sort 
 	std::vector<int> p; 
 	std::vector<int> g;
 	std::vector<int> s = { 13, 2, 4, 5, 1, 6, 16, 20, 21, 22 }; // max 100
+
 	//std::random_device rd;
 	//std::uniform_int_distribution d(1, 500);
 
@@ -33,9 +35,9 @@ int main(int argc, char* args[]) {
 	std::shuffle(p.begin(), p.end(), std::default_random_engine(seed));
 	std::shuffle(g.begin(), g.end(), std::default_random_engine(seed));
 
-	//pancake_sort(p, renderer);
+	pancake_sort(p, renderer);
 
-	//gnome_sort(g, renderer);
+	gnome_sort(g, renderer);
 
 	sleep_sort(s, renderer);
 
