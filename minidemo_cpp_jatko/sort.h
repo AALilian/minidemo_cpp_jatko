@@ -4,6 +4,7 @@
 #include <vector>
 #include <chrono>
 #include <thread>
+#include <exception>
 
 #include <SDL.h>
 
@@ -128,24 +129,53 @@ void gnome_sort(std::vector<int>& v, int n, SDL_Renderer* r) {
 
 /* ------------------------------------------ SLEEP SORT ------------------------------------------ */
 
+#define MAX 100
+static int lookup_table[MAX] = { 0 };
+
+void draw_vector(std::vector<int>& v, SDL_Renderer* r) {
+	//! draw black screen
+	SDL_SetRenderDrawColor(r, 0, 0, 0, 255);
+	SDL_RenderClear(r);
+
+	SDL_SetRenderDrawColor(r, 255, 255, 255, 255);
+
+	for (int i = 0; i < MAX; ++i) {
+
+		if (lookup_table[i] == 1) {
+			SDL_RenderDrawLine(r, i, 0, i, v[i]);
+		}
+	}
+	SDL_RenderPresent(r);
+}
+
 //! sleep sort with a smaller vector 
 //! all threads asleep at first
 //! "each thread sleeps for an amount of time which is proportional to the value of corresponding array element" 
+//! thread wakes up to print the corresponding number
 //! lmao what is this 
 void sleep_sort(SDL_Renderer* r) {
 	std::cout << "SLEEP!!!\n";
-	std::vector<int> s = { 13, 2, 4, 5, 1, 6 , 16, 20, 21, 22 };
+	std::vector<int> s = { 13, 2, 4, 5, 1, 6 , 16, 20, 21, 22 }; // max 100
+
+	SDL_RenderSetScale(r, 60, 20); // heh
+	SDL_SetRenderDrawColor(r, 0, 0, 0, 255);
+	SDL_RenderClear(r);
+	SDL_SetRenderDrawColor(r, 255, 255, 255, 255);
 
 	std::vector<std::thread> threads;
 
+	//! loop through the vector, create a new thread for every vector element
 	for (int i = 0; i < s.size(); ++i) {
-		threads.emplace_back([i, &s]() {
+		threads.emplace_back([i, &s, r]() {
 			std::this_thread::sleep_for(std::chrono::seconds(s[i]));
-			std::cout << s[i] << "\n";			
+			std::cout << s[i] << "\n";
+
+			lookup_table[i] = 1; 
+			draw_vector(s, r);
 			});
-		/*draw_state(s, r);*/
 	}
 
+	//! wait for all threads to finish
 	for (auto& thread : threads) {
 		thread.join();
 	}
