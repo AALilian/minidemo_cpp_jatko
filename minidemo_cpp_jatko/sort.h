@@ -68,10 +68,12 @@ void flip(std::vector<int>& v, int i) {
 }
 
 //! main function for pancake sort algorithm
-void pancake_sort(std::vector<int>& v, int n, SDL_Renderer* r) {
+void pancake_sort(std::vector<int>& v, SDL_Renderer* r) {
 	std::cout << "PANCAKE!!!\n";
 
-	for (int current_size = n; current_size > 1; --current_size) {
+	SDL_RenderSetScale(r, 8, 8);
+
+	for (int current_size = v.size(); current_size > 1; --current_size) {
 		//! help (lambda)function for pancake sort: return the index of the max value in given vector
 		auto find_max = [](std::vector<int>& v, int n) {
 			int mi, i;
@@ -98,18 +100,20 @@ void pancake_sort(std::vector<int>& v, int n, SDL_Renderer* r) {
 	}
 	
 	std::cout << "sorted: ";
-	print_array(v, n);
+	print_array(v, v.size());
 }
 
 /* ------------------------------------------ GNOME SORT ------------------------------------------ */
 
 //! based on garden gnome sorting flower pots. compares two values (or pots) and if they are in the right order, continues forward. 
 //! if not, two values are swapped until the order is right and the algorithm (or gnome) can continue
-void gnome_sort(std::vector<int>& v, int n, SDL_Renderer* r) {
+void gnome_sort(std::vector<int>& v, SDL_Renderer* r) {
 	std::cout << "GNOME!!!!\n";
+
+	SDL_RenderSetScale(r, 40, 40);
 	
 	int index = 0;
-	while (index < n) {
+	while (index < v.size()) {
 		if (index == 0) index++;
 
 		if (v[index] >= v[index - 1]) {
@@ -124,7 +128,7 @@ void gnome_sort(std::vector<int>& v, int n, SDL_Renderer* r) {
 	}
 
 	std::cout << "sorted: ";
-	print_array(v, n);
+	print_array(v, v.size());
 }
 
 /* ------------------------------------------ SLEEP SORT ------------------------------------------ */
@@ -153,11 +157,10 @@ void draw_vector(std::vector<int>& v, SDL_Renderer* r) {
 //! "each thread sleeps for an amount of time which is proportional to the value of corresponding array element" 
 //! thread wakes up to print the corresponding number
 //! lmao what is this 
-void sleep_sort(SDL_Renderer* r) {
+void sleep_sort(std::vector<int>& v, SDL_Renderer* r) {
 	std::cout << "SLEEP!!!\n";
-	std::vector<int> s = { 13, 2, 4, 5, 1, 6 , 16, 20, 21, 22 }; // max 100
 
-	SDL_RenderSetScale(r, 60, 20); // heh
+	SDL_RenderSetScale(r, 50, 30); // heh
 	SDL_SetRenderDrawColor(r, 0, 0, 0, 255);
 	SDL_RenderClear(r);
 	SDL_SetRenderDrawColor(r, 255, 255, 255, 255);
@@ -165,13 +168,13 @@ void sleep_sort(SDL_Renderer* r) {
 	std::vector<std::thread> threads;
 
 	//! loop through the vector, create a new thread for every vector element
-	for (int i = 0; i < s.size(); ++i) {
-		threads.emplace_back([i, &s, r]() {
-			std::this_thread::sleep_for(std::chrono::seconds(s[i]));
-			std::cout << s[i] << "\n";
+	for (int i = 0; i < v.size(); ++i) {
+		threads.emplace_back([i, &v, r]() {
+			std::this_thread::sleep_for(std::chrono::seconds(v[i]));
+			std::cout << v[i] << "\n";
 
 			lookup_table[i] = 1; 
-			draw_vector(s, r);
+			draw_vector(v, r);
 			});
 	}
 
@@ -179,4 +182,6 @@ void sleep_sort(SDL_Renderer* r) {
 	for (auto& thread : threads) {
 		thread.join();
 	}
+
+	std::cout << "d o n e";
 }
