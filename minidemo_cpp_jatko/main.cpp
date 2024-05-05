@@ -12,7 +12,7 @@ int main(int argc, char* args[]) {
 		return 1;
 	}
 
-	SDL_CreateWindowAndRenderer(1200, 640, SDL_FLIP_HORIZONTAL, &window, &renderer);	
+	//SDL_CreateWindowAndRenderer(1200, 640, SDL_FLIP_HORIZONTAL, &window, &renderer);	
 	SDL_RenderSetScale(renderer, 6, 6);
 
 	SDL_Init(SDL_INIT_EVERYTHING);
